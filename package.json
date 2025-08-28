@@ -1,0 +1,29 @@
+{
+  "name": "ai-chat-rate-limiter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Animesh459/AI-chat-rate-limiter.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Animesh459/AI-chat-rate-limiter/issues"
+  },
+  "homepage": "https://github.com/Animesh459/AI-chat-rate-limiter#readme",
+  "dependencies": {
+    "@ai-sdk/openai": "^2.0.22",
+    "ai": "^5.0.27",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.0.1"
+  }
+}
