@@ -74,7 +74,7 @@ Authorization: Bearer <user_token>
 
 **Response (Limit Exceeded):**
 ```json
-{ "success": false, "error": "Too many requests. Free users can make 10 requests per hour.", "remaining_requests": 0, "reset_in_seconds": "MS" }
+{ "success": false, "error": "Too many requests. Free users can make 10 requests per hour.", "remaining_requests": 0, "reset_in_seconds": "S" }
 ```
 
 ---
@@ -89,7 +89,7 @@ Authorization: Bearer <user_token>
 
 **Response:**
 ```json
-{ "success": true, "userType": "free", "total_requests_per_hour": 10, "remaining_requests": 9 , "reset_in_seconds": "MS"}
+{ "success": true, "userType": "free", "total_requests_per_hour": 10, "remaining_requests": 9 , "reset_in_seconds": "S"}
 ```
 
 ---
@@ -111,7 +111,7 @@ Authorization: Bearer <user_token>
 ## ⚙️ Getting Started
 
 ### Prerequisites
-- Node.js **v16.x+**
+- Node
 
 ### Installation
 ```bash
