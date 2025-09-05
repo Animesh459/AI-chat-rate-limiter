@@ -11,16 +11,16 @@ It enforces **different request limits based on user tiers**, ensuring fair acce
 ---
 
 ## ✨ Features
-- ⏳ **Fixed Window Rate Limiting** (1-hour reset time per tier)
-- 🧑‍🤝‍🧑 **Tier-Based Limits**  
+-  ** Fixed Window Rate Limiting** (1-hour reset time per tier)
+- 🧑‍🤝‍🧑 ** Tier-Based Limits**  
   - Guest: 3 requests/hour  
   - Free: 10 requests/hour  
   - Premium: 50 requests/hour
-- 💰 **Cost Management**: Limits enforced *before* costly AI calls
-- 🔑 **Flexible User Identification**: Unique ID (logged-in) or IP (guests)
-- 📡 **Clear API**: Login, Chat, Status endpoints
-- 📦 **Scalable Architecture**: Middleware, routes, and modular design
-- ⚠️ **Error Handling**: Clear error responses when limits exceeded
+-  ** Cost Management**: Limits enforced *before* costly AI calls
+-  ** Flexible User Identification**: Unique ID (logged-in) or IP (guests)
+-  ** Clear API**: Login, Chat, Status endpoints
+-  ** Scalable Architecture**: Middleware, routes, and modular design
+-  ** Error Handling**: Clear error responses when limits exceeded
 
 ---
 
