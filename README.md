@@ -36,6 +36,9 @@ Simulates login and returns a **token**.
 ```json
 { "username": "premiumuser" }
 ```
+```json
+{ "username": "DEFAULT IS FREE" }
+```
 **Response:**
 ```json
 {
@@ -59,14 +62,14 @@ Authorization: Bearer <user_token>
 **Request:**
 ```json
 
-from vercel AI SDK OR
+{ "message": "THIS WILL COME FROM AI SDK OR" },
 
 { "message": "What is the capital of France?" }
 ```
 
 **Response (Success):**
 ```json
-{ "success": true, "message": "AI response here...", "remaining_requests": 7, "reset_in_seconds": "MS" }
+{ "success": true, "message": "AI response here...", "remaining_requests": 7 }
 ```
 
 **Response (Limit Exceeded):**
@@ -86,7 +89,7 @@ Authorization: Bearer <user_token>
 
 **Response:**
 ```json
-{ "success": true, "userType": "free", "total_requests_per_hour": 10, "remaining_requests": 9 }
+{ "success": true, "userType": "free", "total_requests_per_hour": 10, "remaining_requests": 9 , "reset_in_seconds": "MS"}
 ```
 
 ---

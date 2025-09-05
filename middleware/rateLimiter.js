@@ -68,7 +68,7 @@ function rateLimiter(req, res, next) {
     if (userData.count >= limit) {
         return res.status(429).json({
             success: false,
-            error: `${userType.charAt(0).toUpperCase() + userType.slice(1)} users can make ${limit} requests per hour.`,
+            error: `Too many requests ${userType.charAt(0).toUpperCase() + userType.slice(1)} users can make ${limit} requests per hour.`,
             remaining_requests: 0,
             reset_in_seconds: secondsUntilReset,
         });
