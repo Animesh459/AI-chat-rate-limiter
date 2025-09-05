@@ -19,6 +19,10 @@
   },
   "homepage": "https://github.com/Animesh459/AI-chat-rate-limiter#readme",
   "dependencies": {
+    "@ai-sdk/google": "^2.0.12",
+    "@ai-sdk/openai": "^2.0.24",
+    "ai": "^5.0.33",
+    "dotenv": "^17.2.2",
     "express": "^5.1.0"
   }
 }

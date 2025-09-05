@@ -1,85 +1,84 @@
 // middleware/rateLimiter.js
-
 const userLimits = {
-    guest: 3, // 3 AI questions per hour
-    free: 10, // 10 AI questions per hour
-    premium: 50, // 50 AI questions per hour
+    guest: 3,
+    free: 10,
+    premium: 50,
 };
 
-// In-memory storage for user usage
+// in-memory usage store (simple fixed-window)
 const requestCounts = {};
 
-// Helper function to decode a token
+// decode base64 token -> JSON (Node-friendly)
 function decodeToken(token) {
     try {
-        return JSON.parse(atob(token));
+        const json = Buffer.from(token, 'base64').toString('utf8');
+        return JSON.parse(json);
     } catch (e) {
         return null;
     }
 }
 
-// **CORRECTED AND SIMPLIFIED** Helper function
-const getUserData = (req) => {
+const ONE_HOUR_MS = 60 * 60 * 1000;
+
+function getUserData(req) {
     let userId;
     let userType;
 
-    // Check for a valid token first
-    const token = req.headers['authorization'];
-    if (token && token.startsWith('Bearer ')) {
-        const decoded = decodeToken(token.split(' ')[1]);
-        if (decoded) {
-            // A valid token was found, use its data
+    const header = req.headers['authorization'];
+    if (header && header.startsWith('Bearer ')) {
+        const decoded = decodeToken(header.split(' ')[1]);
+        if (decoded && decoded.id) {
             userId = decoded.id;
-            userType = decoded.type;
+            userType = decoded.type || 'free';
         }
     }
 
-    // If no valid token was found, default to guest
+    // fallback to IP for guests
     if (!userId) {
-        userId = req.ip;
+        userId = req.ip || req.connection?.remoteAddress || 'unknown';
         userType = 'guest';
     }
 
-    const limit = userLimits[userType];
+    const limit = userLimits[userType] ?? userLimits.free;
 
     if (!requestCounts[userId]) {
-        requestCounts[userId] = {
-            count: 0,
-            lastResetTime: Date.now()
-        };
+        requestCounts[userId] = { count: 0, lastResetTime: Date.now() };
     }
 
     const userData = requestCounts[userId];
-    const currentTime = Date.now();
-    const oneHourInMs = 60 * 60 * 1000;
+    const now = Date.now();
 
-    // Fixed Window logic: reset the counter if the window has expired
-    if (currentTime - userData.lastResetTime >= oneHourInMs) {
+    // Fixed window: reset if > 1 hour since lastResetTime
+    if (now - userData.lastResetTime >= ONE_HOUR_MS) {
         userData.count = 0;
-        userData.lastResetTime = currentTime;
+        userData.lastResetTime = now;
     }
 
-    return { userId, userType, limit, userData };
-};
+    const secondsUntilReset = Math.max(
+        0,
+        Math.ceil((userData.lastResetTime + ONE_HOUR_MS - now) / 1000)
+    );
 
-// Rate Limiter Middleware
-const rateLimiter = (req, res, next) => {
-    const { userType, limit, userData } = getUserData(req);
+    return { userId, userType, limit, userData, secondsUntilReset };
+}
 
-    // Check if the user has exceeded their limit
+function rateLimiter(req, res, next) {
+    const { userType, limit, userData, secondsUntilReset } = getUserData(req);
+
     if (userData.count >= limit) {
-        const errorMsg = `Too many requests. ${userType.charAt(0).toUpperCase() + userType.slice(1)} users can make ${limit} requests per hour.`;
         return res.status(429).json({
             success: false,
-            error: errorMsg,
-            remaining_requests: 0
+            error: `${userType.charAt(0).toUpperCase() + userType.slice(1)} users can make ${limit} requests per hour.`,
+            remaining_requests: 0,
+            reset_in_seconds: secondsUntilReset,
         });
     }
 
-    // If not exceeded, increment the count
+    // allowed — increment BEFORE continuing to ensure check happens before AI call
     userData.count++;
-    req.remainingRequests = limit - userData.count;
+    req.remainingRequests = Math.max(0, limit - userData.count);
+    req.rateLimit = { userType, limit, reset_in_seconds: secondsUntilReset };
     next();
-};
+}
 
-module.exports = { rateLimiter, getUserData };
+module.exports = { rateLimiter, getUserData, _requestCounts: requestCounts };

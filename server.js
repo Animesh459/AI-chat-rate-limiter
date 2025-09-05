@@ -1,21 +1,22 @@
 // server.js
-
+require('dotenv').config();
 const express = require('express');
-const app = express();
-const PORT = 3000;
-
-// Import the route files
 const authRoutes = require('./routes/auth');
 const chatRoutes = require('./routes/chat');
 
-// Middleware to parse JSON bodies
+const app = express();
 app.use(express.json());
 
-// Use the imported routes
+// mount routes
 app.use('/api', authRoutes);
 app.use('/api', chatRoutes);
 
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+// only start server when run directly (keeps it testable)
+if (require.main === module) {
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`Server is running on http://localhost:${PORT}`);
+    });
+}
+
+module.exports = app;
