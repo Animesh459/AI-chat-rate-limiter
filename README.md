@@ -31,16 +31,18 @@ Simulates login and returns a **token**.
 
 **Request:**
 ```json
-{ "username": "freeuser" }
+{ "username": "guestuser" }
 ```
-
+```json
+{ "username": "premiumuser" }
+```
 **Response:**
 ```json
 {
   "success": true,
   "message": "Login successful.",
   "token": "eyJpZCI6ImZyZWV1c2VyIiwidHlwZSI6ImZyZWUifQ==",
-  "userType": "free"
+  "userType": "premium"
 }
 ```
 
@@ -61,12 +63,12 @@ Authorization: Bearer <user_token>
 
 **Response (Success):**
 ```json
-{ "success": true, "message": "AI response here...", "remaining_requests": 7 }
+{ "success": true, "message": "AI response here...", "remaining_requests": 7, "reset_in_seconds": "MS" }
 ```
 
 **Response (Limit Exceeded):**
 ```json
-{ "success": false, "error": "Too many requests. Free users can make 10 requests per hour.", "remaining_requests": 0 }
+{ "success": false, "error": "Too many requests. Free users can make 10 requests per hour.", "remaining_requests": 0, "reset_in_seconds": "MS" }
 ```
 
 ---
@@ -107,10 +109,18 @@ Authorization: Bearer <user_token>
 
 ### Installation
 ```bash
-git clone https://github.com/your-username/ai-chat-rate-limiter.git
+git clone https://github.com/Animesh459/AI-chat-rate-limiter
 cd ai-chat-rate-limiter
 npm install express
-```
+
+# For Gemini
+GOOGLE_GENERATIVE_AI_API_KEY=your_google_gemini_api_key
+
+# OR for OpenAI
+OPENAI_API_KEY=your_openai_key
+OPENAI_MODEL=gpt-your_model
+
+``` 
 
 ### Running
 ```bash
