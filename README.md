@@ -58,6 +58,9 @@ Authorization: Bearer <user_token>
 
 **Request:**
 ```json
+
+from vercel AI SDK OR
+
 { "message": "What is the capital of France?" }
 ```
 
